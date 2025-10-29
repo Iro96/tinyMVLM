@@ -89,14 +89,18 @@ class LocalPairsDataset(Dataset):
         return len(self.pairs)
 
     def __getitem__(self, idx):
-        img_path, caption = self.pairs[idx]
-        full_path = os.path.join(self.image_root, img_path)
-        image = Image.open(full_path).convert("RGB")
-        image = self.transform(image)
-        text_inputs = self.tokenizer(
-            caption, truncation=True, padding="max_length", max_length=16, return_tensors="pt"
-        )
-        return image, text_inputs["input_ids"].squeeze(0), text_inputs["attention_mask"].squeeze(0), caption
+        try:
+            img_path, caption = self.pairs[idx]
+            full_path = os.path.join(self.image_root, img_path)
+            image = Image.open(full_path).convert("RGB")
+            image = self.transform(image)
+            text_inputs = self.tokenizer(
+                caption, truncation=True, padding="max_length", max_length=16, return_tensors="pt"
+            )
+            return image, text_inputs["input_ids"].squeeze(0), text_inputs["attention_mask"].squeeze(0), caption
+        except Exception as e:
+            print(f"Warning: Skipping problematic sample at index {idx}. Error: {e}")
+            return None
 
 
 class HFFlickr30kDataset(Dataset):
