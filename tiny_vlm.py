@@ -95,7 +95,7 @@ class LocalPairsDataset(Dataset):
             image = Image.open(full_path).convert("RGB")
             image = self.transform(image)
             text_inputs = self.tokenizer(
-                caption, truncation=True, padding="max_length", max_length=16, return_tensors="pt"
+                caption, truncation=True, padding="max_length", max_length=32, return_tensors="pt"
             )
             return image, text_inputs["input_ids"].squeeze(0), text_inputs["attention_mask"].squeeze(0), caption
         except Exception as e:
