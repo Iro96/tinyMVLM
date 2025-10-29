@@ -105,38 +105,32 @@ class HFFlickr30kDataset(Dataset):
     Handles various caption field names: alt_text, caption, sentence.
     """
     def __init__(self, split: str, tokenizer, transform, max_samples: Optional[int] = None):
-        ds = load_dataset("AnyModal/flickr30k", split=split)
+        self.ds = load_dataset("AnyModal/flickr30k", split=split, streaming=False)
         if max_samples is not None:
-            ds = ds.select(range(min(max_samples, len(ds))))
-        self.examples = []
-
-        for ex in ds:
-            # Detect caption field automatically
-            if "alt_text" in ex:
-                caption = ex["alt_text"]
-            elif "caption" in ex:
-                caption = ex["caption"]
-            elif "sentence" in ex:
-                caption = ex["sentence"][0] if isinstance(ex["sentence"], list) else ex["sentence"]
-            else:
-                raise KeyError(f"Cannot find a caption field in example keys: {list(ex.keys())}")
-
-            if "image" not in ex:
-                raise KeyError(f"Cannot find 'image' field in example keys: {list(ex.keys())}")
-
-            img = ex["image"]
-            self.examples.append((img, caption))
-            if max_samples and len(self.examples) >= max_samples:
-                break
+            self.ds = self.ds.select(range(min(max_samples, len(self.ds))))
 
         self.tokenizer = tokenizer
         self.transform = transform
 
     def __len__(self):
-        return len(self.examples)
+        return len(self.ds)
 
     def __getitem__(self, idx):
-        img, caption = self.examples[idx]
+        ex = self.ds[idx]
+        # Detect caption field automatically
+        if "alt_text" in ex:
+            caption = ex["alt_text"]
+        elif "caption" in ex:
+            caption = ex["caption"]
+        elif "sentence" in ex:
+            caption = ex["sentence"][0] if isinstance(ex["sentence"], list) else ex["sentence"]
+        else:
+            raise KeyError(f"Cannot find a caption field in example keys: {list(ex.keys())}")
+
+        if "image" not in ex:
+            raise KeyError(f"Cannot find 'image' field in example keys: {list(ex.keys())}")
+
+        img = ex["image"]
         image = self.transform(img.convert("RGB"))
         text_inputs = self.tokenizer(
             caption, truncation=True, padding="max_length", max_length=32, return_tensors="pt"
