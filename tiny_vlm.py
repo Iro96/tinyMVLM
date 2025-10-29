@@ -146,7 +146,7 @@ class HFFlickr30kDataset(Dataset):
 def collate_fn(batch):
     batch = [b for b in batch if b is not None]
     if not batch:
-        return None, None, None, None
+        return None
     images, input_ids, attention_masks, captions = zip(*batch)
     images = torch.stack(images, dim=0)
     input_ids = torch.stack(input_ids, dim=0)
@@ -232,7 +232,10 @@ def contrastive_loss(img_emb, txt_emb, logit_scale):
 def train_one_epoch(model, dataloader, optimizer, epoch, device):
     model.train()
     total_loss = 0.0
+    steps = 0
     for i, batch in enumerate(dataloader, 1):
+        if batch is None:
+            continue
         images, input_ids, attention_mask, _ = batch
         images, input_ids, attention_mask = images.to(device), input_ids.to(device), attention_mask.to(device)
 
@@ -243,10 +246,11 @@ def train_one_epoch(model, dataloader, optimizer, epoch, device):
         optimizer.step()
 
         total_loss += loss.item()
+        steps += 1
         if i % 50 == 0:
             print(f"Epoch {epoch} Iter {i}: loss={loss.item():.4f}")
 
-    avg_loss = total_loss / max(1, len(dataloader))
+    avg_loss = total_loss / max(1, steps)
     print(f"Epoch {epoch} Avg Loss: {avg_loss:.4f}")
     return avg_loss
 
@@ -316,8 +320,16 @@ def main():
     save_checkpoint(model, optimizer, args.epochs, args.out_dir)
 
     # Quick test
-    batch = next(iter(dataloader))
-    images, input_ids, attention_mask, captions = batch
+    # Find first non-empty batch
+    batch = None
+    for b in dataloader:
+        if b is not None:
+            batch = b
+            break
+    if batch is None:
+        print("No valid batch for quick test; skipping similarity print.")
+        return
+    images, input_ids, attention_mask, _ = batch
     img_emb, txt_emb = compute_embeddings(model, images, input_ids, attention_mask, device)
     sims = (img_emb @ txt_emb.t()).numpy()
     print("Similarity matrix (first 8x8):")
