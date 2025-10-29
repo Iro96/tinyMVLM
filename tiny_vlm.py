@@ -7,6 +7,7 @@ ViT-Tiny (timm) + MiniLM (HuggingFace).
 Usage examples:
   # Train on Flickr30k (downloads dataset)
   python tiny_vlm.py --dataset AnyModal/flickr30k --batch_size 64 --epochs 3 --out_dir ./checkpoints
+  python tiny_vlm.py --dataset AnyModal/flickr30k --batch_size 16 --num_workers 1 --samples 7000 --epochs 3 --out_dir ./checkpoints
 
   # Train using a local TSV/CSV with columns: image_path\tcaption
   python tiny_vlm.py --dataset local --local_path ./pairs.tsv --batch_size 32 --epochs 5
