@@ -132,12 +132,33 @@ class MergedVLM(nn.Module):
 
     def _init_merge(self):
         with torch.no_grad():
-            base = self.base_proj.weight
-            dt = self.text_proj.weight - base[:self.text_proj.weight.shape[0], :self.text_proj.weight.shape[1]]
-            di = self.image_proj.weight - base[:self.image_proj.weight.shape[0], :self.image_proj.weight.shape[1]]
-            merged = base + self.alpha * dt + self.beta * di
-            merged /= merged.norm(dim=-1, keepdim=True).clamp(min=1e-6)
-            self.merged_proj.weight.copy_(merged)
+            base_w = self.base_proj.weight
+            text_w = self.text_proj.weight
+            image_w = self.image_proj.weight
+
+            # Pad weights to the maximum dimension for merging
+            max_dim = max(base_w.shape[1], text_w.shape[1], image_w.shape[1])
+        
+            def pad_to_max(w, max_d):
+                padding = max_d - w.shape[1]
+                if padding > 0:
+                    return F.pad(w, (0, padding))
+                return w
+
+            base_padded = pad_to_max(base_w, max_dim)
+            text_padded = pad_to_max(text_w, max_dim)
+            image_padded = pad_to_max(image_w, max_dim)
+
+            dt = text_padded - base_padded
+            di = image_padded - base_padded
+        
+            merged = base_padded + self.alpha * dt + self.beta * di
+        
+            # Truncate back to the merged_proj's dimension
+            merged_final = merged[:, :self.merged_proj.weight.shape[1]]
+        
+            merged_final /= merged_final.norm(dim=-1, keepdim=True).clamp(min=1e-6)
+            self.merged_proj.weight.copy_(merged_final)
 
     def encode_text(self, ids, mask):
         out = self.text_encoder(input_ids=ids, attention_mask=mask, return_dict=True)
