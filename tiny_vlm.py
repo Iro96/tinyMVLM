@@ -144,6 +144,9 @@ class HFFlickr30kDataset(Dataset):
 
 # Collate function
 def collate_fn(batch):
+    batch = [b for b in batch if b is not None]
+    if not batch:
+        return None, None, None, None
     images, input_ids, attention_masks, captions = zip(*batch)
     images = torch.stack(images, dim=0)
     input_ids = torch.stack(input_ids, dim=0)
