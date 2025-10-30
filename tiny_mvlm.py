@@ -261,7 +261,7 @@ def train_one_epoch(model, dataloader, optimizer, epoch, device):
 # ---------------------------
 def save_checkpoint(model, optimizer, epoch, out_dir):
     Path(out_dir).mkdir(parents=True, exist_ok=True)
-    path = os.path.join(out_dir, f"tiny_vlm_epoch{epoch}.pt")
+    path = os.path.join(out_dir, f"tiny_mvlm_epoch{epoch}.pt")
     torch.save({
         "model_state_dict": model.state_dict(),
         "optimizer_state_dict": optimizer.state_dict(),
