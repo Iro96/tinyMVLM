@@ -100,11 +100,39 @@ TinyVLM follows the **CLIP** paradigm:
 3. Project both embeddings into a shared latent space.
 4. Train contrastively using an **InfoNCE** loss:
 
-[
-\mathcal{L} = \frac{1}{2} [CE(\text{img→txt}) + CE(\text{txt→img})]
-]
 
-A learnable `logit_scale` parameter controls similarity temperature.
+$$
+\mathcal{L} = 
+\frac{1}{2} 
+\Bigg[
+-\frac{1}{N} \sum_{i=1}^{N} 
+\log
+\frac{
+\exp\left(\text{sim}(v_i, t_i) / \tau\right)
+}{
+\sum_{j=1}^{N} \exp\left(\text{sim}(v_i, t_j) / \tau\right)
+}
+\;-\;
+\frac{1}{N} \sum_{i=1}^{N}
+\log
+\frac{
+\exp\left(\text{sim}(t_i, v_i) / \tau\right)
+}{
+\sum_{j=1}^{N} \exp\left(\text{sim}(t_i, v_j) / \tau\right)
+}
+\Bigg]
+$$
+
+Where:
+
+- $v_i$ = image embedding for sample $i$
+- $t_i$ = text embedding for sample i
+- $\text{sim}(v_i, t_j) = v_i^\top t_j$ is cosine-scaled similarity
+- $\tau = e^{-\mathrm{logit\_scale}}$ is a learnable `logit_scale` parameter controls similarity temperature.
+- $N$ = batch size
+
+
+This loss aligns matched image–text pairs while pushing apart mismatched ones, averaged over both directions (image→text and text→image).
 
 ---
 
