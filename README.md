@@ -112,7 +112,7 @@ $$
 }{
 \sum_{j=1}^{N} \exp\left(\text{sim}(v_i, t_j) / \tau\right)
 }
-\;-\;
+\-\
 \frac{1}{N} \sum_{i=1}^{N}
 \log
 \frac{
