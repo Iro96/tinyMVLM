@@ -1,4 +1,4 @@
-# TinyMVLM — Minimal Vision-Language Model (CLIP-Style)
+# TinyMVLM: Minimal Vision-Language Model (CLIP-Style)
 
 **TinyVLM** is a lightweight, educational implementation of a **CLIP-style contrastive training loop** built with  
 a **ViT-Tiny** image encoder (via `timm`) and a **MiniLM** text encoder (via `transformers`).  
