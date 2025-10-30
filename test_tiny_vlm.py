@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # test_tiny_vlm.py
 """
-Test TinyVLM pretrained model (.pt checkpoint)
+Test TinyMVLM pretrained model (.pt checkpoint)
 
 Usage:
   python test_tiny_vlm.py \
@@ -16,7 +16,7 @@ from transformers import AutoTokenizer
 from torchvision import transforms
 from PIL import Image
 import argparse
-from tiny_vlm import TinyVLM
+from tiny_mvlm import TinyVLM
 
 
 def parse_args():
