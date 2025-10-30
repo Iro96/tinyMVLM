@@ -74,7 +74,7 @@ Optional arguments:
 
 ---
 
-## ⚙️ Key Arguments
+## Key Arguments
 
 | Argument             | Description                                   | Default                |
 | -------------------- | --------------------------------------------- | ---------------------- |
@@ -137,7 +137,7 @@ Each checkpoint contains:
 
 ---
 
-## 🧪 Quick Test
+## Quick Test
 
 After training, the script prints a **similarity matrix** for the first few image–text pairs:
 
