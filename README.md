@@ -22,7 +22,7 @@ It trains image–text alignment models similar to [CLIP](https://openai.com/res
 ```bash
 git clone https://github.com/yourusername/tiny_vlm.git
 cd tiny_vlm
-pip install torch torchvision timm transformers datasets pillow
+pip install -r requirements.txt
 ````
 
 (Optional: you can omit `datasets` if using only local data.)
