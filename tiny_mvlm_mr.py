@@ -1,5 +1,5 @@
 """
-TinyVLM (Merging-Aware, Research Logging Edition)
+TinyMVLM-MR (Merging-Aware, Research Logging Edition)
 -------------------------------------------------
 CLIP-style contrastive model merging pretrained MiniLM (text) and ViT-Tiny (image)
 using model-merging techniques (feature alignment, task-vector fusion, norm preservation).
