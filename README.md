@@ -20,8 +20,8 @@ It trains image–text alignment models similar to [CLIP](https://openai.com/res
 ## Installation
 
 ```bash
-git clone https://github.com/yourusername/tiny_vlm.git
-cd tiny_vlm
+git clone https://github.com/Iro96/tinyMVLM.git
+cd tinyMVLM
 pip install -r requirements.txt
 ````
 
@@ -34,13 +34,13 @@ pip install -r requirements.txt
 ### 1. Train on Flickr30k
 
 ```bash
-python tiny_vlm.py --dataset AnyModal/flickr30k --batch_size 64 --epochs 3 --out_dir ./checkpoints
+python tiny_mvlm.py --dataset AnyModal/flickr30k --batch_size 64 --epochs 3 --out_dir ./checkpoints
 ```
 
 or with fewer samples and workers:
 
 ```bash
-python tiny_vlm.py \
+python tiny_mvlm.py \
   --dataset AnyModal/flickr30k \
   --batch_size 16 \
   --num_workers 1 \
@@ -63,7 +63,7 @@ path/to/image2.png    a car parked on the street
 Then run:
 
 ```bash
-python tiny_vlm.py --dataset local --local_path ./pairs.tsv --batch_size 32 --epochs 5
+python tiny_mvlm.py --dataset local --local_path ./pairs.tsv --batch_size 32 --epochs 5
 ```
 
 Optional arguments:
@@ -139,7 +139,7 @@ This loss aligns matched image–text pairs while pushing apart mismatched ones,
 ## File Structure
 
 ```
-tiny_vlm.py           # Main training script and model definition
+tiny_mvlm.py           # Main training script and model definition
 checkpoints/          # Saved model weights (created automatically)
 pairs.tsv             # Example local dataset file (optional)
 README.md             # This file
@@ -152,8 +152,8 @@ README.md             # This file
 Model checkpoints are automatically saved after each epoch (or every `--save_every` epochs):
 
 ```
-checkpoints/tiny_vlm_epoch1.pt
-checkpoints/tiny_vlm_epoch2.pt
+checkpoints/tiny_mvlm_epoch1.pt
+checkpoints/tiny_mvlm_epoch2.pt
 ...
 ```
 
@@ -165,7 +165,9 @@ Each checkpoint contains:
 
 ---
 
-## Quick Test
+## Testing
+
+### 1. Quick Test
 
 After training, the script prints a **similarity matrix** for the first few image–text pairs:
 
@@ -185,10 +187,21 @@ Diagonal dominance → good alignment between image–text pairs
 You can swap out encoders easily:
 
 ```bash
-python tiny_vlm.py \
+python tiny_mvlm.py \
   --model_text sentence-transformers/all-MiniLM-L12-v2 \
   --image_model_name resnet18
 ```
+
+### 2. Test full pretrained model
+```bash
+python test_tiny_mvlm.py --checkpoint ./checkpoints/tiny_mvlm_epoch*.pt --image ./path/to/img --captions "text" "text" "text"
+```
+Example ouput:
+<div align="center">
+  <img width="50%" height="50%" alt="image" src="https://github.com/Iro96/tinyMVLM/blob/main/assets/cars_crash.png">
+  <img width="50%" height="50%" alt="image" src="https://github.com/user-attachments/assets/4a2e6c4e-6d57-41da-b8db-bb30f07c4109" />
+</div>
+
 
 ---
 
