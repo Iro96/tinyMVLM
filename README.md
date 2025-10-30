@@ -180,6 +180,18 @@ Similarity matrix (first 8x8):
 
 Diagonal dominance → good alignment between image–text pairs
 
+### 2. Test full pretrained model
+```bash
+python test_tiny_mvlm.py --checkpoint ./checkpoints/tiny_mvlm_epoch*.pt --image ./path/to/img --captions "text" "text" "text"
+```
+
+Example ouput:
+
+<div align="center">
+  <img width="50%" height="50%" alt="image" src="https://github.com/Iro96/tinyMVLM/blob/main/assets/cars_crash.png">
+  <img width="50%" height="50%" alt="image" src="https://github.com/user-attachments/assets/4a2e6c4e-6d57-41da-b8db-bb30f07c4109" />
+</div>
+
 ---
 
 ## Example: Custom Models
@@ -191,17 +203,6 @@ python tiny_mvlm.py \
   --model_text sentence-transformers/all-MiniLM-L12-v2 \
   --image_model_name resnet18
 ```
-
-### 2. Test full pretrained model
-```bash
-python test_tiny_mvlm.py --checkpoint ./checkpoints/tiny_mvlm_epoch*.pt --image ./path/to/img --captions "text" "text" "text"
-```
-Example ouput:
-<div align="center">
-  <img width="50%" height="50%" alt="image" src="https://github.com/Iro96/tinyMVLM/blob/main/assets/cars_crash.png">
-  <img width="50%" height="50%" alt="image" src="https://github.com/user-attachments/assets/4a2e6c4e-6d57-41da-b8db-bb30f07c4109" />
-</div>
-
 
 ---
 
