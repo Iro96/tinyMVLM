@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# tiny_vlm.py
+# tiny_mvlm.py
 """
 TinyMVLM (Minimal Vision-Language Model) - CLIP-style contrastive training with
 ViT-Tiny (timm) + MiniLM (HuggingFace).
