@@ -80,7 +80,7 @@ def main():
         txt_emb = torch.nn.functional.normalize(txt_emb, dim=-1)
 
     # Compute similarity (cosine similarity)
-    sims = (img_emb @ txt_emb.T).squeeze(0).cpu().numpy()
+    sims = (img_emb @ txt_emb.T * model.logit_scale.exp()).squeeze(0).cpu().numpy()
 
     # Show results
     print("\n=== Image–Text Similarities ===")
