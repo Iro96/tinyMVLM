@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# test_tiny_vlm.py
+# test_tiny_mvlm.py
 """
 Test TinyMVLM pretrained model (.pt checkpoint)
 
