@@ -16,7 +16,7 @@ from transformers import AutoTokenizer
 from torchvision import transforms
 from PIL import Image
 import argparse
-from tiny_mvlm import TinyVLM
+from ..tiny_mvlm import TinyVLM
 
 
 def parse_args():
